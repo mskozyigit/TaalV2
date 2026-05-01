@@ -17,11 +17,21 @@ kotlin {
     }
 
     wasmJs {
-        browser()
+        browser {
+            binaries.executable()
+            distribution {
+                directory = file("${project.buildDir}/wasm-web")
+            }
+        }
     }
 
     js {
-        browser()
+        browser {
+            binaries.executable()
+            distribution {
+                directory = file("${project.buildDir}/web")
+            }
+        }
     }
 
     sourceSets {
@@ -69,4 +79,3 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 }
-
