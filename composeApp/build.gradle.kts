@@ -16,22 +16,29 @@ kotlin {
         }
     }
 
+    @OptIn(org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl::class)
     wasmJs {
         browser {
-            binaries.executable()
-            distribution {
-                directory = file("${project.buildDir}/wasm-web")
+            commonWebpackConfig {
+                outputFileName = "composeApp.js"
             }
         }
+        binaries.executable()
     }
 
     js {
         browser {
-            binaries.executable()
-            distribution {
-                directory = file("${project.buildDir}/web")
+            commonWebpackConfig {
+                outputFileName = "composeApp.js"
+                devServer = (devServer ?: org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig.DevServer()).apply {
+                    static = (static ?: mutableListOf()).apply {
+                        add(project.projectDir.resolve("src/commonMain/resources").absolutePath)
+                    }
+                    port = 8081
+                }
             }
         }
+        binaries.executable()
     }
 
     sourceSets {
